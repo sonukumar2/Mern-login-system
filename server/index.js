@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
 require('dotenv').config();
 
 const app = express();
@@ -16,11 +17,12 @@ mongoose.connect(process.env.MDB_CONNECT,{
 mongoose.connection.on('connected',()=>{
     console.log("connected to MongoDB");
 })
+
 mongoose.connection.on('error',()=>{
     console.log("Error Occured");
 })
 
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 6000;
 
 
 app.use(express.json());
