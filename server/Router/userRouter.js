@@ -7,14 +7,14 @@ const router = express();
 
 router.post('/', async (req, res) => {
     try {
-        const { email, password, cpassword } = req.body;
-        console.log(email); 
+        const { email, password, passwordVerify } = req.body;
+        // console.log(email); 
 
-        if (!email || !password || !cpassword) {
+        if (!email || !password || !passwordVerify) {
             res.status(400).json({ msg: "Enter Details " });
         }
 
-        if (password !== cpassword) {
+        if (password !== passwordVerify) {
             res.status(400).json({ msg: "Password MisMatch" });
         }
         const existingUser = await User.findOne({ email });
@@ -33,7 +33,7 @@ router.post('/', async (req, res) => {
             email, passwordHash
         });
         const savedUser = await newUser.save();
-        res.send(savedUser).json({"msg": "Successfuly Posted"});
+        res.status(300).json({"msg": "Successfuly Posted"});
         // .then(result => {
         //     res.status(200).json({ "msg": "Successfuly Posted" })
         // })
@@ -98,7 +98,6 @@ router.post('/login',  (req, res) => {
 
 
 })
-
 
 // Log Out 
 router.get("/logout", (req, res) => {
