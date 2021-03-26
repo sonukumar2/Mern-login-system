@@ -1,11 +1,12 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
+dotenv.config();
 
 const usr = require('./models/userSchema'); 
 
-require('dotenv').config();
 
 const app = express();
 

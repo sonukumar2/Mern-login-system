@@ -62,17 +62,19 @@ router.post('/login',  (req, res) => {
     try {
         const { email, password } = req.body;
         if (!email || !password) {
-            res.status(400).json({ "msg": "Please Enter Required fields" })
+           return res.status(400).json({ "msg": "Please Enter Required fields" })
         }
         const existingUser =  User.findOne({ email });
+
         if (!existingUser) {
-            res.status(400).json({ "msg": "Not Registered" })
+           return res.status(400).json({ "msg": "Not Registered" })
         }
 
         const pwd =  bcrypt.compare(password, existingUser.passwordHash);
         if (!pwd) {
-            res.status(401).json({ "msg": "Wrong Email and Password" })
+           return res.status(401).json({ "msg": "Wrong Email and Password" })
         }
+    
         // sign the token
 
         const token = jwt.sign(
@@ -90,7 +92,7 @@ router.post('/login',  (req, res) => {
                 secure: true,
                 sameSite: "none",
             })
-            .send();
+            .send("success");
 
     } catch (error) {
         res.status(500).send(error);
@@ -109,6 +111,19 @@ router.get("/logout", (req, res) => {
         sameSite: "none",
       })
       .send();
+  });
+
+  router.get("/loggedIn", (req, res) => {
+    try {
+      const token = req.cookies.token;
+      if (!token) return res.json({msg: "Logged In"});
+  
+      jwt.verify(token, process.env.JWT_SECRET);
+  
+    //   res.send(true);
+    } catch (err) {
+      res.json({msg: "Error Occured"});
+    }
   });
 
 module.exports = router;
