@@ -7,11 +7,11 @@ dotenv.config();
 
 const usr = require('./models/userSchema'); 
 
-
 const app = express();
 
 mongoose.Promise = global.Promise;
 
+// --------------- Mongo DB Connection ---------------- //
 mongoose.connect(process.env.MDB_CONNECT,{
     useNewUrlParser: true,
     useCreateIndex: true,
@@ -29,6 +29,7 @@ mongoose.connection.on('error',()=>{
 
 const port = process.env.PORT || 5000;
 
+// --------------- MiddleWare ---------------- //
 app.use(express.json());
 app.use(cors(
     {
@@ -36,16 +37,17 @@ app.use(cors(
         credentials: true,
     }
 ));
-// app.use(cookieParser);
+app.use(cookieParser());
 
 // const  startserver = () => {
 //     console.log(`Server started through function`);
 // }
 
-
+// --------------- Create Server ---------------- //
 app.listen(port, () => {
     console.log(`Server Started at port ${port}`);
 });
+
 
 app.get('/', (req,res) =>{
     usr.find()
@@ -58,6 +60,6 @@ app.get('/', (req,res) =>{
     })
 })
 
-// set up routes
+// ------------- set up routes ------------- //
 app.use('/auth', require('./Router/userRouter'));
 app.use('/customer', require('./Router/customerRouter'));
